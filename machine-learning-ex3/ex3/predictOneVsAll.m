@@ -30,10 +30,17 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+% fprintf('theta size: %f*%f \n', size(all_theta,1), size(all_theta,2));
+% fprintf('X size: %f*%f \n', size(X,1), size(X,2));
 
-
-
-
+all_pred = sigmoid(all_theta * X');
+% fprintf('all_pred size: %f*%f \n', size(all_pred,1), size(all_pred,2));
+[max_p, index_p] = max(all_pred);
+p = index_p';
+% p = index_p - 1;
+% p((p==0)) = 10;
+% fprintf('p size: %f*%f \n', size(p,1), size(p,2));
+% test = [p,y]
 
 
 % =========================================================================

@@ -50,7 +50,15 @@ X = [ones(m, 1) X];
 %
 
 
-
+for classifier = 1:num_labels
+  options = optimset('GradObj', 'on', 'MaxIter', 50);
+  initial_theta = ones(n + 1, 1);
+  [theta] = fmincg (@(t)(lrCostFunction(t, X, (y == classifier), lambda)),initial_theta, options);
+  % fprintf('theta size: %f*%f \n', size(theta,1), size(theta,2));
+  % fprintf('all_theta size: %f*%f \n', size(all_theta,1), size(all_theta,2));
+  % pause;
+  all_theta(classifier,:) = theta';
+endfor
 
 
 
