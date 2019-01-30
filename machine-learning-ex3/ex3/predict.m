@@ -21,10 +21,17 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+X = [ones(size(X,1),1),X];
+A2 = sigmoid(Theta1 * X');
+% fprintf('A2 size: %f*%f \n', size(A2,1), size(A2,2));
+A2 = [ones(1,size(A2,2));A2];
+% fprintf('A2 size: %f*%f \n', size(A2,1), size(A2,2));
 
+A3 = sigmoid(Theta2 * A2);
 
+[max_p, index_p] = max(A3);
 
-
+p = index_p';
 
 
 
