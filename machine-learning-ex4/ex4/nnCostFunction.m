@@ -62,22 +62,73 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+A1 = [ones(1,size(X,1));X'];
+A2 = Theta1 * A1;
+Z2 = sigmoid(A2);
+Z2_withUnit = [ones(1,size(Z2,2));Z2];
+A3 = Theta2 * Z2_withUnit;
+hyp = sigmoid(A3)';
+
+% This does not work since we need inly the sum of the diagonal of the matrix
+%Yk = [];
+%for classifier = 1:num_labels
+%  Yk = [Yk; (y == classifier)'];
+%endfor
+%cost = ((-Yk*log(hyp)) - ((1-Yk)*log(1-hypK)));
+
+
+cost = 0;
+for classifier = 1:num_labels
+  Yk = (y == classifier)';
+  hypK = hyp(:,classifier);
+  cost = cost + ((-Yk*log(hypK)) - ((1-Yk)*log(1-hypK)));
+endfor
+
+J = sum(cost)/m;
+
+Theta1_sq = Theta1;
+Theta1_sq(:,1) = zeros(size(Theta1,1), 1);
+Theta1_sq = Theta1_sq .^ 2;
+
+Theta2_sq = Theta2;
+Theta2_sq(:,1) = zeros(size(Theta2,1), 1);
+Theta2_sq = Theta2_sq .^ 2;
+
+reg = sum(sum(Theta1_sq)) + sum(sum(Theta2_sq));
+
+J = J + ((lambda * reg) / (2 * m));
+
+delta1 = zeros(hidden_layer_size, input_layer_size+1);
+delta2 = zeros(num_labels, hidden_layer_size+1);
+
+%fprintf("num_labels: %d\n", num_labels);
+
+for t = 1 : m
+  A1T = [1;X(t,:)'];
+  Z2T = Theta1 * A1T;
+  A2T = sigmoid(Z2T);
+  A2T_withUnit = [1;A2T];
+  Z3T = Theta2 * A2T_withUnit;
+  hypT = sigmoid(Z3T);
+  yT = zeros(num_labels,1);
+  % yT(mod(y(t),num_labels)+1) = 1;
+  yT(y(t)) = 1;
+  sig3 = hypT - yT;
+  sig2 = (Theta2' * sig3) .* sigmoidGradient([1;Z2T]);
+  sig2 = sig2(2:end);
+  delta2 = delta2 + (sig3 * A2T_withUnit');
+  delta1 = delta1 + (sig2 * [1,X(t,:)]);
+endfor
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Theta1_reg = Theta1;
+Theta2_reg = Theta2;
+Theta1_reg(:,1) = 0;
+Theta2_reg(:,1) = 0;
+Theta1_grad = (delta1/m) + ((lambda * Theta1_reg)/m);
+Theta2_grad = (delta2/m) + ((lambda * Theta2_reg)/m);
 
 
 % -------------------------------------------------------------

@@ -20,6 +20,13 @@ W = zeros(L_out, 1 + L_in);
 %
 
 
+epilson_init = sqrt(6) / sqrt(L_in + L_out);
+%fprintf('epilson_init:\n');
+%fprintf('%f \n', epilson_init);
+W = (rand(L_out , L_in+1) * 2 * epilson_init) - epilson_init;
+
+%fprintf('W:\n');
+%fprintf('%f %f\n', size(W));
 
 
 
