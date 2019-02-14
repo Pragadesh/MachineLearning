@@ -20,18 +20,21 @@ grad = zeros(size(theta));
 %
 
 
+hyp = X * theta;
 
+modTheta = theta;
+modTheta(1) = 0;
 
+cost1 = (sum((hyp - y) .^ 2 ) / (2 * m));
+reg = sum(modTheta .^ 2) * lambda / (2 * m);
+J = cost1 + reg;
 
+grad1 = X' * (hyp - y);
+grad2 = (lambda * modTheta) / m;
 
-
-
-
-
-
+grad = (grad1 / m) + grad2;
 
 % =========================================================================
 
-grad = grad(:);
 
 end
