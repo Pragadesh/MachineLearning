@@ -42,14 +42,23 @@ error_val   = zeros(m, 1);
 %
 % Hint: You can loop over the examples with the following:
 %
-%       for i = 1:m
+        for i = 1:m
 %           % Compute train/cross validation errors using training examples 
 %           % X(1:i, :) and y(1:i), storing the result in 
 %           % error_train(i) and error_val(i)
 %           ....
-%           
-%       end
-%
+            %fprintf( "Iteration: %d\n", i);
+            Xtrain = X(1:i, :);
+            Ytrain = y(1:i);
+            thetaTrain = trainLinearReg(Xtrain, Ytrain, lambda);
+            [Jtrain, GradTrain] = linearRegCostFunction(Xtrain, Ytrain, thetaTrain, 0);
+%            fprintf( "Jtrain: %d\n", Jtrain);
+            [Jval, GradVal] = linearRegCostFunction(Xval, yval, thetaTrain, 0);
+            
+%            fprintf( "Jtrain: %d\n", Jval);
+            error_train(i) = Jtrain;
+            error_val(i) = Jval;
+       endfor
 
 % ---------------------- Sample Solution ----------------------
 
