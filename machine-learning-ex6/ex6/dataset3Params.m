@@ -23,10 +23,32 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+C_arr = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+sigma_arr = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+
+lowest_model_error = 100;
 
 
 
+for C_elem = C_arr
+  for sigma_elem = sigma_arr
 
+    model= svmTrain(X, y, C_elem, @(x1, x2) gaussianKernel(x1, x2, sigma_elem));
+    predictions = svmPredict(model, Xval);
+    model_error = mean(double(predictions ~= yval));
+    
+    if (model_error < lowest_model_error)
+      lowest_model_error = model_error;
+      C = C_elem;
+      sigma = sigma_elem;
+    endif
+    
+  endfor
+endfor
+
+fprintf("C: %f\n", C);
+fprintf("sigma: %f\n", sigma);
+fprintf("model_error: %f\n", lowest_model_error);
 
 
 % =========================================================================
