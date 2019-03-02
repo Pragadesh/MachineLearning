@@ -22,10 +22,11 @@ idx = zeros(size(X,1), 1);
 %
 
 
-
-
-
-
+for i = 1:size(X,1)
+  Xsample = X(i,:);
+  [val,pos] = min(sum(((Xsample - centroids) .^ 2)')');
+  idx(i) = pos;
+endfor
 
 % =============================================================
 
